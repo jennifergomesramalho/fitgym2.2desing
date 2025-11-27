@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FITGYM — Gestão de Academia</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ========================================
+        LOGIN DO GESTOR
+======================================== -->
+<div id="loginPage">
+  <div class="login-container">
+    <div class="login-card">
+      <h1>FITGYM</h1>
+      <p class="muted">Acesso do Gestor</p>
+
+      <input id="login-email" type="email" placeholder="E-mail" />
+      <input id="login-senha" type="password" placeholder="Senha" maxlength="6" />
+
+      <button onclick="loginGestor()" class="btn">Entrar</button>
+
+      <p class="muted" style="margin-top:15px;">
+        Não possui conta?
+        <a href="#" onclick="openRegisterGestor()">Cadastrar gestor</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================
+        CADASTRO DO GESTOR
+======================================== -->
+<div id="registerGestorPage" style="display:none;">
+  <div class="login-container">
+    <div class="login-card">
+      <h1>Novo Gestor</h1>
+
+      <input id="gestor-nome" placeholder="Nome completo" />
+      <input id="gestor-email" placeholder="E-mail" type="email" />
+      <input id="gestor-senha" placeholder="Senha (6 dígitos)" maxlength="6" />
+
+      <button onclick="registerGestor()" class="btn">Cadastrar</button>
+
+      <p class="muted" style="margin-top:15px;">
+        Já tem conta?
+        <a href="#" onclick="backToLogin()">Voltar ao login</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================
+        APLICAÇÃO PRINCIPAL
+======================================== -->
+<div id="app" class="app" style="display:none;">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">FG</div>
+      <div>
+        <h1>FITGYM</h1>
+        <div class="muted" style="font-size:12px">Força. Rotina. Resultado.</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <button id="nav-home" class="active" onclick="openSection('home')">Painel</button>
+      <button id="nav-register" onclick="openSection('register')">Cadastrar Aluno</button>
+      <button id="nav-workout" onclick="openSection('workout')">Criar Treino</button>
+      <button id="nav-equipamentos" onclick="openSection('equipamentos')">Equipamentos</button>
+      <button id="nav-admin" onclick="openSection('admin')">Área ADM</button>
+      <button onclick="logout()">Sair</button>
+    </nav>
+
+    <div class="footer-contact">
+      <div style="font-weight:600">Contato</div>
+      <div class="muted" style="font-size:13px">Tel: (11) 99999-9999</div>
+      <div class="muted" style="font-size:13px">Email: contato.fitgym@gmail.com</div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <div></div>
+      <div class="user-controls">
+        <div class="muted">Gestor Logado</div>
+        <div class="badge">ADM</div>
+      </div>
+    </div>
+
+    <div class="grid">
+
+      <!-- ====================== HOME ======================= -->
+      <section class="card welcome" id="section-home">
+        <h2>Bem-vindo ao FITGYM</h2>
+        <p class="muted" style="font-size: 1.2em; margin: 20px 0;">"Transforme o esforço de hoje na confiança de amanhã."</p>
+        
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-number" id="total-alunos">0</div>
+            <div class="stat-label">Total de Alunos</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="total-treinos">0</div>
+            <div class="stat-label">Treinos Criados</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="total-equipamentos">0</div>
+            <div class="stat-label">Equipamentos</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- LISTA DE ALUNOS -->
+      <section class="card" id="section-home-list" style="grid-column:span 12">
+        <h3>Lista de Alunos</h3>
+        <div id="students-list" class="students-list">
+          <div class="loading">Carregando alunos...</div>
+        </div>
+      </section>
+
+      <!-- ====================== CADASTRO ALUNO ======================= -->
+      <section class="card" id="section-register" style="grid-column:span 8; display:none;">
+        <h3>Cadastro de Aluno</h3>
+        
+        <input id="r-name" placeholder="Nome completo" />
+        <input id="r-phone" placeholder="Telefone" />
+        <input id="r-email" type="email" placeholder="E-mail" />
+        <input id="r-pass" placeholder="Senha (6 dígitos)" maxlength="6" />
+        
+        <button class="btn" onclick="registerStudent()">Cadastrar Aluno</button>
+        
+        <div id="register-message"></div>
+      </section>
+
+      <!-- ====================== TREINOS ======================= -->
+      <section class="card" id="section-workout" style="grid-column:span 8; display:none;">
+        <h3>Criar Treino</h3>
+
+        <label>Aluno</label>
+        <select id="w-student">
+          <option value="">Carregando alunos...</option>
+        </select>
+
+        <label>Nome do treino</label>
+        <input id="w-name" placeholder="Ex: Treino A - Peito e Tríceps" />
+
+        <label>Selecione os exercícios</label>
+        <div id="exercise-list" class="exercise-box">
+          <div class="loading">Carregando exercícios...</div>
+        </div>
+
+        <button class="btn" onclick="createWorkout()">Salvar treino</button>
+
+        <h4>Treinos criados</h4>
+        <div id="workouts-list">
+          <div class="loading">Carregando treinos...</div>
+        </div>
+      </section>
+
+      <!-- ====================== EQUIPAMENTOS ======================= -->
+      <section class="card" id="section-equipamentos" style="grid-column:span 8; display:none;">
+        <h3>Gerenciar Equipamentos</h3>
+
+        <h4>Adicionar Equipamento</h4>
+        <input id="eq-nome" placeholder="Nome do equipamento" />
+        <select id="eq-status">
+          <option value="ativo">Ativo</option>
+          <option value="manutencao">Em Manutenção</option>
+          <option value="inativo">Inativo</option>
+        </select>
+        <input id="eq-local" placeholder="Localização na academia" />
+        <button class="btn" onclick="addEquipamento()">Adicionar Equipamento</button>
+
+        <h4>Lista de Equipamentos</h4>
+        <div id="equipamentos-list">
+          <div class="loading">Carregando equipamentos...</div>
+        </div>
+      </section>
+
+      <!-- ====================== ÁREA ADM ======================= -->
+      <section class="card" id="section-admin" style="grid-column:span 12; display:none;">
+        <h3>Área Do Aluno</h3>
+        <div id="adm-students">
+          <div class="loading">Carregando dados do aluno...</div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
